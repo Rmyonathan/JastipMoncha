@@ -58,11 +58,7 @@ export function Dashboard({ initialOrders, initialSummary }: Props) {
 
   return (
     <>
-      <ProfitSummary
-        summary={summary}
-        refreshing={refreshing}
-        onSummaryChange={setSummary}
-      />
+      <ProfitSummary summary={summary} refreshing={refreshing} />
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-sm text-slate-600">

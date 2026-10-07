@@ -53,13 +53,18 @@ export function OrderForm({ onClose, onSaved }: OrderFormProps) {
     );
     const ongkir = Number(ongkirPerOrang.replace(/\D/g, "")) || 0;
     const orderTotal = itemsSubtotal + ongkir;
-    const orderProfit =
-      filled.reduce(
-        (s, i) => s + lineProfit(i.qty, i.unitPrice, i.unitCost),
-        0,
-      ) + ongkir;
+    const itemProfit = filled.reduce(
+      (s, i) => s + lineProfit(i.qty, i.unitPrice, i.unitCost),
+      0,
+    );
     const deposit = Number(depositPaid.replace(/\D/g, "")) || 0;
-    return { orderTotal, orderProfit, remaining: orderTotal - deposit, ongkir };
+    return {
+      orderTotal,
+      itemProfit,
+      netItemProfit: itemProfit - ongkir,
+      remaining: orderTotal - deposit,
+      ongkir,
+    };
   }, [items, depositPaid, ongkirPerOrang]);
 
   function updateItem(index: number, patch: Partial<ItemDraft>) {
@@ -351,7 +356,12 @@ export function OrderForm({ onClose, onSaved }: OrderFormProps) {
             Order total: <strong>{formatIdr(preview.orderTotal)}</strong>
           </span>
           <span className="mr-4">
-            Order profit: <strong className="text-emerald-700">{formatIdr(preview.orderProfit)}</strong>
+            Item profit:{" "}
+            <strong className="text-emerald-700">{formatIdr(preview.itemProfit)}</strong>
+          </span>
+          <span className="mr-4">
+            After ongkir:{" "}
+            <strong>{formatIdr(preview.netItemProfit)}</strong>
           </span>
           <span>
             Remaining: <strong>{formatIdr(preview.remaining)}</strong>

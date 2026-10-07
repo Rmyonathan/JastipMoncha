@@ -17,7 +17,7 @@ function enrichOrder(order: OrderRow, items: OrderItemRow[]): OrderWithItems {
   const order_profit = items.reduce(
     (sum, i) => sum + lineProfit(i.qty, i.unit_price, i.unit_cost),
     0,
-  ) + ongkir;
+  );
   return {
     ...order,
     ongkir_per_orang: ongkir,
@@ -84,33 +84,29 @@ export async function fetchProfitSummary(): Promise<ProfitSummary> {
     ) <= 0
   `) as { paid_ongkir: number }[];
 
-  const settings = (await sql`
-    SELECT estimated_expenses FROM app_settings WHERE id = 1
-  `) as { estimated_expenses: number }[];
-
   const totalOngkir = ongkirTotals[0]?.total_ongkir ?? 0;
-  const totalRevenue = (totals[0]?.revenue ?? 0) + totalOngkir;
+  const totalRevenue = totals[0]?.revenue ?? 0;
   const totalCost = totals[0]?.cost ?? 0;
   const grossProfit = totalRevenue - totalCost;
-  const estimatedExpenses = settings[0]?.estimated_expenses ?? 0;
-  const netProfit = grossProfit - estimatedExpenses;
+  const netProfit = grossProfit - totalOngkir;
 
   const paidItemsRevenue = paidTotals[0]?.revenue ?? 0;
   const paidItemsCost = paidTotals[0]?.cost ?? 0;
   const paidOngkirAmount = paidOngkir[0]?.paid_ongkir ?? 0;
-  const paidRevenue = paidItemsRevenue + paidOngkirAmount;
-  const paidGrossProfit =
-    paidItemsRevenue - paidItemsCost + paidOngkirAmount;
+  const paidRevenue = paidItemsRevenue;
+  const paidGrossProfit = paidItemsRevenue - paidItemsCost;
+  const paidNetProfit = paidGrossProfit - paidOngkirAmount;
 
   return {
     totalRevenue,
     totalCost,
     grossProfit,
-    estimatedExpenses,
+    totalOngkir,
     netProfit,
     paidRevenue,
     paidGrossProfit,
-    totalOngkir,
+    paidOngkir: paidOngkirAmount,
+    paidNetProfit,
   };
 }
 

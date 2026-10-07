@@ -9,11 +9,12 @@ export default async function HomePage() {
     totalRevenue: 0,
     totalCost: 0,
     grossProfit: 0,
-    estimatedExpenses: 0,
+    totalOngkir: 0,
     netProfit: 0,
     paidRevenue: 0,
     paidGrossProfit: 0,
-    totalOngkir: 0,
+    paidOngkir: 0,
+    paidNetProfit: 0,
   };
   let dbError: string | null = null;
 

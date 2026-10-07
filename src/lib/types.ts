@@ -52,11 +52,12 @@ export type ProfitSummary = {
   totalRevenue: number;
   totalCost: number;
   grossProfit: number;
-  estimatedExpenses: number;
+  totalOngkir: number;
   netProfit: number;
   paidRevenue: number;
   paidGrossProfit: number;
-  totalOngkir: number;
+  paidOngkir: number;
+  paidNetProfit: number;
 };
 
 export type UpdateOrderPayload = {
