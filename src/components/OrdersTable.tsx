@@ -40,8 +40,28 @@ type FlatRow = {
 
 const cellInput =
   "w-full min-w-0 border-0 bg-transparent px-2 py-1.5 text-sm focus:bg-white focus:outline focus:outline-1 focus:outline-blue-500";
-const cellSelect =
-  "w-full min-w-[7rem] border-0 bg-transparent px-1 py-1.5 text-sm focus:bg-white focus:outline focus:outline-1 focus:outline-blue-500";
+const cellInputMoney =
+  "w-full min-w-[8rem] border-0 bg-transparent px-2 py-1.5 text-right text-sm tabular-nums focus:bg-white focus:outline focus:outline-1 focus:outline-blue-500";
+
+/** Minimum column widths so shipping, cost, and text fields stay readable */
+const col = {
+  orderId: "min-w-[6.5rem]",
+  customer: "min-w-[10rem]",
+  contact: "min-w-[10rem]",
+  date: "min-w-[10.5rem]",
+  item: "min-w-[12rem]",
+  qty: "min-w-[5rem]",
+  cost: "min-w-[10rem]",
+  selling: "min-w-[10rem]",
+  lineMoney: "min-w-[8.5rem]",
+  status: "min-w-[11rem]",
+  shipping: "min-w-[18rem]",
+  tracking: "min-w-[12rem]",
+  deposit: "min-w-[8rem]",
+  ongkir: "min-w-[8rem]",
+  orderMoney: "min-w-[8.5rem]",
+  actions: "min-w-[7rem]",
+} as const;
 
 function flattenOrders(orders: OrderWithItems[]): FlatRow[] {
   const rows: FlatRow[] = [];
@@ -354,28 +374,28 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
         </p>
       ) : (
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1200px] border-collapse">
+        <table className="w-full min-w-[2100px] border-collapse">
           <thead>
             <tr>
-              <th className={headerClass}>Order ID</th>
-              <th className={headerClass}>Customer</th>
-              <th className={headerClass}>Contact</th>
-              <th className={headerClass}>Date</th>
-              <th className={headerClass}>Item</th>
-              <th className={headerClass}>Qty</th>
-              <th className={headerClass}>Cost</th>
-              <th className={headerClass}>Selling</th>
-              <th className={headerClass}>Line total</th>
-              <th className={headerClass}>Line profit</th>
-              <th className={headerClass}>Item status</th>
-              <th className={headerClass}>Order status</th>
-              <th className={headerClass}>Shipping</th>
-              <th className={headerClass}>Tracking</th>
-              <th className={headerClass}>Deposit</th>
-              <th className={headerClass}>Ongkir / org</th>
-              <th className={headerClass}>Order total</th>
-              <th className={headerClass}>Remaining</th>
-              <th className={headerClass}>Actions</th>
+              <th className={`${headerClass} ${col.orderId}`}>Order ID</th>
+              <th className={`${headerClass} ${col.customer}`}>Customer</th>
+              <th className={`${headerClass} ${col.contact}`}>Contact</th>
+              <th className={`${headerClass} ${col.date}`}>Date</th>
+              <th className={`${headerClass} ${col.item}`}>Item</th>
+              <th className={`${headerClass} ${col.qty}`}>Qty</th>
+              <th className={`${headerClass} ${col.cost}`}>Cost</th>
+              <th className={`${headerClass} ${col.selling}`}>Selling</th>
+              <th className={`${headerClass} ${col.lineMoney}`}>Line total</th>
+              <th className={`${headerClass} ${col.lineMoney}`}>Line profit</th>
+              <th className={`${headerClass} ${col.status}`}>Item status</th>
+              <th className={`${headerClass} ${col.status}`}>Order status</th>
+              <th className={`${headerClass} ${col.shipping}`}>Shipping</th>
+              <th className={`${headerClass} ${col.tracking}`}>Tracking</th>
+              <th className={`${headerClass} ${col.deposit}`}>Deposit</th>
+              <th className={`${headerClass} ${col.ongkir}`}>Ongkir / org</th>
+              <th className={`${headerClass} ${col.orderMoney}`}>Order total</th>
+              <th className={`${headerClass} ${col.orderMoney}`}>Remaining</th>
+              <th className={`${headerClass} ${col.actions}`}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -455,7 +475,7 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                       }
                     />
                   </td>
-                  <td className={`${bodyCell} w-16`}>
+                  <td className={bodyCell}>
                     <input
                       type="number"
                       min={1}
@@ -473,7 +493,7 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                     <input
                       type="number"
                       min={0}
-                      className={`${cellInput} text-right`}
+                      className={cellInputMoney}
                       value={row.unitCost}
                       onChange={(e) =>
                         updateRow(row.key, {
@@ -491,7 +511,7 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                     <input
                       type="number"
                       min={0}
-                      className={`${cellInput} text-right`}
+                      className={cellInputMoney}
                       value={row.unitPrice}
                       onChange={(e) =>
                         updateRow(row.key, {
@@ -560,8 +580,9 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                     </select>
                   </td>
                   <td className={bodyCell}>
-                    <input
-                      className={cellInput}
+                    <textarea
+                      rows={2}
+                      className={`${cellInput} min-h-[2.75rem] resize-y`}
                       value={row.shippingAddress}
                       onChange={(e) => {
                         updateRow(row.key, { shippingAddress: e.target.value });
@@ -593,7 +614,7 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                     <input
                       type="number"
                       min={0}
-                      className={`${cellInput} text-right`}
+                      className={cellInputMoney}
                       value={row.depositPaid}
                       onChange={(e) => {
                         const depositPaid = Number(e.target.value) || 0;
@@ -611,7 +632,7 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                     <input
                       type="number"
                       min={0}
-                      className={`${cellInput} text-right`}
+                      className={cellInputMoney}
                       value={row.ongkirPerOrang}
                       onChange={(e) => {
                         const ongkirPerOrang = Number(e.target.value) || 0;
