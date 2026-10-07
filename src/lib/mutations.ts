@@ -120,6 +120,36 @@ export async function patchOrderItemRecord(
   }
 }
 
+export async function deleteOrderItemRecord(id: number): Promise<number | null> {
+  const sql = getSql();
+  const rows = (await sql`
+    SELECT order_id FROM order_items WHERE id = ${id}
+  `) as { order_id: number }[];
+  if (rows.length === 0) throw new Error("Line item not found");
+
+  const orderId = rows[0].order_id;
+  await sql`DELETE FROM order_items WHERE id = ${id}`;
+
+  const remaining = (await sql`
+    SELECT COUNT(*)::int AS count FROM order_items WHERE order_id = ${orderId}
+  `) as { count: number }[];
+
+  if ((remaining[0]?.count ?? 0) === 0) {
+    await sql`DELETE FROM orders WHERE id = ${orderId}`;
+    return null;
+  }
+  return orderId;
+}
+
+export async function deleteOrderRecord(id: number): Promise<void> {
+  const sql = getSql();
+  const existing = (await sql`
+    SELECT id FROM orders WHERE id = ${id}
+  `) as { id: number }[];
+  if (existing.length === 0) throw new Error("Order not found");
+  await sql`DELETE FROM orders WHERE id = ${id}`;
+}
+
 export async function patchEstimatedExpenses(amount: number): Promise<void> {
   const sql = getSql();
   await sql`

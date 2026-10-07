@@ -165,6 +165,47 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
     }
   }
 
+  async function deleteLine(row: FlatRow) {
+    const ok = window.confirm(
+      `Delete this line?\n\n${row.itemName} (${row.orderCode})`,
+    );
+    if (!ok) return;
+    setSavingKey(row.key);
+    try {
+      const res = await fetch(`/api/order-items/${row.itemId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Delete failed");
+      await afterSave();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Could not delete");
+    } finally {
+      setSavingKey(null);
+    }
+  }
+
+  async function deleteOrder(row: FlatRow) {
+    const lineCount = rows.filter((r) => r.orderDbId === row.orderDbId).length;
+    const ok = window.confirm(
+      `Delete entire order ${row.orderCode} (${row.customerName}) and all ${lineCount} item line(s)? This cannot be undone.`,
+    );
+    if (!ok) return;
+    setSavingKey(row.key);
+    try {
+      const res = await fetch(`/api/orders/${row.orderDbId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Delete failed");
+      await afterSave();
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Could not delete");
+    } finally {
+      setSavingKey(null);
+    }
+  }
+
   const filteredRows = useMemo(() => {
     const orderIdQ = orderIdFilter.trim().toLowerCase();
     const customerQ = customerFilter.trim().toLowerCase();
@@ -334,6 +375,7 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
               <th className={headerClass}>Ongkir / org</th>
               <th className={headerClass}>Order total</th>
               <th className={headerClass}>Remaining</th>
+              <th className={headerClass}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -591,6 +633,24 @@ export function OrdersTable({ orders, onSaved, saving }: Props) {
                   </td>
                   <td className={`${bodyCell} whitespace-nowrap px-2 text-right tabular-nums font-medium`}>
                     {formatIdr(row.remainingBalance)}
+                  </td>
+                  <td className={`${bodyCell} whitespace-nowrap px-2 py-1`}>
+                    <div className="flex flex-col gap-1">
+                      <button
+                        type="button"
+                        onClick={() => deleteLine(row)}
+                        className="text-left text-xs font-medium text-red-700 hover:underline"
+                      >
+                        Delete line
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteOrder(row)}
+                        className="text-left text-xs font-medium text-red-900 hover:underline"
+                      >
+                        Delete order
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );
