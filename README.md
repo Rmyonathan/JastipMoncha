@@ -1,4 +1,4 @@
-# CECE OCHA Jastip (Next.js + Neon)
+# Jastip Moncha (Next.js + Neon)
 
 Single-page jastip tracker: customer info, shipping, multi-item orders, and profit summary (matches your Excel logic).
 

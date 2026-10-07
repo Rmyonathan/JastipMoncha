@@ -42,6 +42,8 @@ const cellInput =
   "w-full min-w-0 border-0 bg-transparent px-2 py-1.5 text-sm focus:bg-white focus:outline focus:outline-1 focus:outline-blue-500";
 const cellInputMoney =
   "w-full min-w-[8rem] border-0 bg-transparent px-2 py-1.5 text-right text-sm tabular-nums focus:bg-white focus:outline focus:outline-1 focus:outline-blue-500";
+const cellSelect =
+  "w-full min-w-[10rem] border-0 bg-transparent px-1 py-1.5 text-sm focus:bg-white focus:outline focus:outline-1 focus:outline-blue-500";
 
 /** Minimum column widths so shipping, cost, and text fields stay readable */
 const col = {

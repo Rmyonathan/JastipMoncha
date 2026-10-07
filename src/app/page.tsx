@@ -34,7 +34,7 @@ export default async function HomePage() {
     <main className="mx-auto flex w-full max-w-[1920px] flex-1 flex-col gap-8 px-4 py-10 lg:px-8">
       <header>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          CECE OCHA Jastip
+          Jastip Moncha
         </h1>
         <p className="mt-2 max-w-2xl text-slate-600">
           Simple jastip tracker: one form for customer info, shipping, multi-item

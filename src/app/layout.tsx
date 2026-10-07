@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CECE OCHA Jastip",
-  description: "Jastip order and profit tracker",
+  title: "Jastip Moncha",
+  description: "Jastip Moncha — order and profit tracker",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
